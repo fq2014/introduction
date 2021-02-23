@@ -4,50 +4,50 @@ import sys
 
 def webServer(port=13331):
 
-   serverSocket = socket(AF_INET, SOCK_STREAM)
+    serverSocket = socket(AF_INET, SOCK_STREAM)
 
-   serverSocket.bind(("", port))
+    serverSocket.bind(("", port))
 
-   serverSocket.listen(1)
+    serverSocket.listen(1)
 
-   while True:
+    while True:
 
-       #print('Ready to serve...')
+        print('Ready to serve...')
 
-       connectionSocket, addr = serverSocket.accept()
+        connectionSocket, addr = serverSocket.accept()
 
-       try:
+        try:
+            try:
 
-           message = connectionSocket.recv(1024)
+                message = connectionSocket.recv(1024)
 
-           filename = message.split()[1]
+                filename = message.split()[1]
 
-           f = open(filename[1:])
+                f = open(filename[1:])
 
-           outputdata = f.read()
+                outputdata = f.read()
 
-           connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n".encode())
-
-
-           for i in range(0, len(outputdata)):
-               connectionSocket.send(outputdata[i].encode())
+                connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n".encode())
 
 
-
-           connectionSocket.send("\r\n".encode())
-
-           connectionSocket.close()
-
-       except IOError:
+                for i in range(0, len(outputdata)):
+                    connectionSocket.send(outputdata[i].encode())
 
 
-           connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
 
-           connectionSocket.close()
+                connectionSocket.send("\r\n".encode())
+                connectionSocket.close()
 
-   serverSocket.close()
+            except IOError:
+        except (ConnectionResetError, BrokenPipeError): pass
 
-   sys.exit()
+    connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
+
+    connectionSocket.close()
+
+    serverSocket.close()
+
+    sys.exit()
 
 
 
