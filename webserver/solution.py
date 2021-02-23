@@ -24,9 +24,10 @@ def webServer(port=13331):
            connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
            connectionSocket.close()
 		  
-
+       except BrokenPipeError:
+           break
 		  
    serverSocket.close()
    sys.exit()
 if __name__ == "__main__":
-    webServer(port=13331)
+    webServer(13331)
