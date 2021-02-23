@@ -29,4 +29,4 @@ def webServer(port=13331):
    serverSocket.close()
    sys.exit()
 if __name__ == "__main__":
-    webServer(13331)
+    webServer(port=13331)
